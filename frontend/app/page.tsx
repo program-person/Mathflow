@@ -52,23 +52,38 @@ export default function APP() {
           <label htmlFor="formula" className={styles.input_label}>
             数式を入力してください(例: 2x + 3 = 7)
           </label>
-          <div className="flex gap-2">
+          <div className = {styles.input_section_container}>
             <input
               id="formula"
               type="text"
               value={formula}
               onChange={(e) => setFormula(e.target.value)}
-              placeholder="x^2 - 4"
+              placeholder="数式を入力してください(例: 2x + 3 = 7)"
               className={styles.input_section}
               onKeyDown={(e) => e.key === "Enter" && handleCalculate()}
             />
             <button
               onClick={handleCalculate}
               disabled={loading}
-              className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-bold rounded-xl transition-all shadow-lg active:scale-95"
+              className="px-6 py-3 bg-indigo-600 w-max max-w-full hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-bold rounded-xl transition-all shadow-lg active:scale-95 self-start"
             >
               {loading ? "計算中..." : "計算"}
             </button>
+          </div>
+          <div className = {styles.checkbox_container}>
+            <span>・オプション</span>
+            <label className = {styles.expanded_checkbox_group}>
+              <input type = "radio" name = "primary" id = "expanded" className = {styles.expanded_checkbox}/>
+              <a className = {styles.expanded_text}>展開を優先する</a>
+            </label>
+            <label className = {styles.factored_checkbox_group}>
+              <input type = "radio" name = "primary" id = "factored" className = {styles.factored_checkbox}/>
+              <a className = {styles.factored_text}>因数分解を優先する</a>
+            </label>
+            <label className = {styles.none_checkbox_group}>
+              <input type = "radio" name = "primary" id = "none" className = {styles.none_checkbox}/>
+              <a className = {styles.none_text}>優先選択なし</a>
+            </label>
           </div>
         </div>
 

@@ -1,14 +1,15 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import sympy
-from sympy.parsing.sympy_parser import parse_expr
+from sympy.parsing.sympy_parser import parse_expr, standard_transformations, implicit_multiplication_application
 
 
 app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://localhost:5173",
+
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -24,15 +25,15 @@ class FormulaRequest(BaseModel):
 @app.post("/solve")
 async def solve_equation(req: FormulaRequest):
     try:
-
+        transformation = (standard_transformations + (implicit_multiplication_application,))
         expr_str = req.formula
 
         if "=" in expr_str:
             left,right = expr_str.split("=")
-            expr = parse_expr(left) - parse_expr(right)
+            expr = parse_expr(left, transformations=transformation) - parse_expr(right, transformations=transformation)
             is_equation = True
         else:
-            expr = parse_expr(expr_str)
+            expr = parse_expr(expr_str, transformations=transformation)
             is_equation = False
         
         symbols = list(expr.free_symbols)
